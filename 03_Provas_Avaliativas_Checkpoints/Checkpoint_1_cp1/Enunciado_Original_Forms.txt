@@ -1,0 +1,7 @@
+FIAP • Engenharia da Computação
+Disciplina: Linguagens, Autômatos e Computabilidade
+Turma 4ECS • Ano 2025
+Checkpoint 01: Alfabetos, Cadeias, Linguagens Formais e Operações Algébricas
+
+ENUNCIADO ORIGINAL:
+Demonstrar formalmente as propriedades de fechamento de linguagens regulares sob operações de união, concatenação, fecho de Kleene, interseção e complemento.

@@ -1,0 +1,7 @@
+FIAP • Engenharia da Computação
+Disciplina: Linguagens, Autômatos e Computabilidade
+Turma 4ECS • Ano 2025
+Checkpoint 02: Autômatos Finitos Determinísticos (AFD) e Minimização de Hopcroft
+
+ENUNCIADO ORIGINAL:
+Construir o AFD M = (Q, Sigma, delta, q0, F) que reconhece cadeias binárias com número par de 0s e número ímpar de 1s e aplicar o algoritmo de minimização de estados de Hopcroft.

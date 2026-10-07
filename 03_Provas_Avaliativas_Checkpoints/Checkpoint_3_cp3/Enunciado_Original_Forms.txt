@@ -1,0 +1,7 @@
+FIAP • Engenharia da Computação
+Disciplina: Linguagens, Autômatos e Computabilidade
+Turma 4ECS • Ano 2025
+Checkpoint 03: Expressões Regulares e o Lema do Bombeamento para Linguagens Regulares
+
+ENUNCIADO ORIGINAL:
+Utilizar o Lema do Bombeamento (Pumping Lemma) para provar por contradição que a linguagem L = {a^n b^n | n >= 0} não é regular e não pode ser reconhecida por nenhum AFD.

@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIAP • Linguagens, Autômatos e Computabilidade | Turma 4ECS • 2025</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <style>
+    :root {
+      --bg-dark: #120e05;
+      --bg-card: #211a09;
+      --bg-surface: #33280e;
+      --border: #4d3d15;
+      --text-main: #f3f4f6;
+      --text-muted: #94a3b8;
+      --primary: #eab308;
+      --secondary: #f59e0b;
+      --accent: #facc15;
+      --radius: 12px;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      padding-top: 80px;
+    }
+
+    [id] { scroll-margin-top: 95px; }
+
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(10, 14, 23, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      padding: 10px 24px;
+    }
+
+    .header-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .header-row-1 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-row-1 .brand-fiap {
+      color: var(--primary);
+      font-weight: 900;
+      letter-spacing: 0.5px;
+    }
+
+    .header-row-2 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .turma-tag {
+      font-size: 0.82rem;
+      line-height: 1.3;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.12);
+      padding: 3px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .btn-repo-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      line-height: 1.3;
+      font-weight: 700;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 5px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .btn-repo-top:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+      filter: brightness(1.1);
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero-banner {
+      margin-bottom: 32px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .hero-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--primary);
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .metric-val {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .metric-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-item {
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+    }
+
+    .nav-item:hover, .nav-item:focus {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .cp-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
+    .section-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+
+    .problem-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .box-header {
+      background: rgba(255,255,255,0.03);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .copy-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .box-content {
+      padding: 20px;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+    }
+
+    .formula-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .formula-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .formula-latex {
+      font-size: 1.2rem;
+      color: #ffffff;
+      overflow-x: auto;
+      padding: 8px 0;
+    }
+
+    .symbolab-container {
+      margin-bottom: 28px;
+    }
+
+    .symbolab-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      transition: transform 0.2s ease;
+    }
+
+    .step-card:hover {
+      transform: translateX(4px);
+      border-color: var(--primary);
+    }
+
+    .step-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .step-content p {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    .plot-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .plot-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    .plot-img-container {
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      background: #00000022;
+    }
+
+    .plot-img-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg-card);
+      padding: 32px 24px;
+      text-align: center;
+      margin-top: 60px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 8px 16px;
+      }
+      .header-row-1 {
+        font-size: 0.95rem;
+      }
+      .turma-tag {
+        font-size: 0.78rem;
+        padding: 2px 8px;
+      }
+      .btn-repo-top {
+        font-size: 0.78rem;
+        padding: 4px 10px;
+      }
+      body {
+        padding-top: 75px;
+      }
+      .container {
+        padding: 16px;
+      }
+      .cp-section {
+        padding: 20px 16px;
+      }
+      .section-title {
+        font-size: 1.25rem;
+      }
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <div class="header-row-1">
+        <span class="brand-fiap">FIAP</span> • Engenharia da Computação
+      </div>
+      <div class="header-row-2">
+        <span class="turma-tag">TURMA 4ECS • 2025</span>
+        <a href="https://github.com/Guimemee/fiap-linguagens-automatos-e-computabilidade" class="btn-repo-top" target="_blank" rel="noopener">
+          <span>Ver Repositório</span>
+          <span>↗</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-banner">
+      <img src="card_technologies.svg" alt="FIAP • Linguagens, Autômatos e Computabilidade - 4ECS 2025" />
+    </div>
+
+    <div class="metrics-grid">
+      
+        <div class="metric-card">
+          <div class="metric-label">HIERARQUIA CHOMSKY</div>
+          <div class="metric-val">TIPO 0 A 3</div>
+          <div class="metric-sub">Expressividade Formal de Linguagens</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">EQUIVALÊNCIA FORMAL</div>
+          <div class="metric-val">AFD ≡ AFN ≡ ER</div>
+          <div class="metric-sub">Poder de Reconhecimento Idêntico</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">DECIDIBILIDADE</div>
+          <div class="metric-val">INDECIDÍVEL</div>
+          <div class="metric-sub">Problema da Parada de Turing</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">COMPLEXIDADE P VS NP</div>
+          <div class="metric-val">NP-COMPLETO</div>
+          <div class="metric-sub">Teorema de Cook-Levin e Redutibilidade</div>
+        </div>
+    </div>
+
+    <nav class="nav-tabs" aria-label="Navegação de Checkpoints">
+      <a href="#cp1" class="nav-item">CP1</a><a href="#cp2" class="nav-item">CP2</a><a href="#cp3" class="nav-item">CP3</a><a href="#cp4" class="nav-item">CP4</a><a href="#cp5" class="nav-item">CP5</a><a href="#cp6" class="nav-item">CP6</a>
+    </nav>
+
+    
+      <section id="cp1" class="cp-section">
+        <div class="section-badge">CHECKPOINT 01 • 4ECS 2025</div>
+        <h2 class="section-title">Alfabetos, Cadeias, Linguagens Formais e Operações Algébricas</h2>
+        
+        <div class="problem-box">
+          <div class="box-header">
+            <span>📋 ENUNCIADO ORIGINAL DA AVALIAÇÃO</span>
+            <button class="copy-btn" onclick="copyText('prob-cp1')">Copiar Enunciado</button>
+          </div>
+          <div id="prob-cp1" class="box-content">
+            <p>Demonstrar formalmente as propriedades de fechamento de linguagens regulares sob operações de união, concatenação, fecho de Kleene, interseção e complemento.</p>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-title">📐 MODELAGEM MATEMÁTICA &amp; FORMULAÇÃO FORMAL</div>
+          <div class="formula-latex">$$L_1 \cup L_2 = \{w \mid w \in L_1 \lor w \in L_2\}, \quad L^* = \bigcup_{i=0}^\infty L^i, \quad L^0 = \{\epsilon\}$$</div>
+        </div>
+
+        <div class="symbolab-container">
+          <h3 class="symbolab-title">💎 Resolução Algébrica Passo a Passo (Padrão Symbolab)</h3>
+          
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 1: Definição Formal de Alfabeto e Cadeia</span>
+              </div>
+              <div class="step-content">
+                <p>\Sigma = \{0, 1\}; cadeias w \in \Sigma^* com comprimento |w| \ge 0.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 2: Fechamento sob União e Concatenação</span>
+              </div>
+              <div class="step-content">
+                <p>Construção com autômato AFN com transições-\epsilon provando que a classe de linguagens regulares é fechada sob união.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 3: Fechamento sob Complemento</span>
+              </div>
+              <div class="step-content">
+                <p>Inversão dos estados de aceitação F' = Q \setminus F em AFD determinístico completo.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 4: Leis de De Morgan para Interseção</span>
+              </div>
+              <div class="step-content">
+                <p>L_1 \cap L_2 = \overline{\overline{L_1} \cup \overline{L_2}}, provando fechamento sob interseção.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 5: Conclusão Teórica</span>
+              </div>
+              <div class="step-content">
+                <p>A álgebra de linguagens regulares forma uma álgebra booleana fechada completa.</p>
+              </div>
+            </div>
+        </div>
+
+        <div class="plot-box">
+          <div class="box-header">
+            <span>📊 GRÁFICO COMPUTACIONAL &amp; VISUALIZAÇÃO DE RESULTADOS</span>
+            <span class="plot-tag">Matplotlib • Alta Resolução</span>
+          </div>
+          <div class="plot-img-container">
+            <img src="03_Provas_Avaliativas_Checkpoints/Checkpoint_1_cp1/grafico_resolucao.png" alt="Gráfico Alfabetos, Cadeias, Linguagens Formais e Operações Algébricas" loading="lazy" />
+          </div>
+        </div>
+      </section>
+      <section id="cp2" class="cp-section">
+        <div class="section-badge">CHECKPOINT 02 • 4ECS 2025</div>
+        <h2 class="section-title">Autômatos Finitos Determinísticos (AFD) e Minimização de Hopcroft</h2>
+        
+        <div class="problem-box">
+          <div class="box-header">
+            <span>📋 ENUNCIADO ORIGINAL DA AVALIAÇÃO</span>
+            <button class="copy-btn" onclick="copyText('prob-cp2')">Copiar Enunciado</button>
+          </div>
+          <div id="prob-cp2" class="box-content">
+            <p>Construir o AFD M = (Q, Sigma, delta, q0, F) que reconhece cadeias binárias com número par de 0s e número ímpar de 1s e aplicar o algoritmo de minimização de estados de Hopcroft.</p>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-title">📐 MODELAGEM MATEMÁTICA &amp; FORMULAÇÃO FORMAL</div>
+          <div class="formula-latex">$$M = (Q, \Sigma, \delta, q_0, F), \quad \delta: Q \times \Sigma \to Q, \quad |Q_{min}| = 4$$</div>
+        </div>
+
+        <div class="symbolab-container">
+          <h3 class="symbolab-title">💎 Resolução Algébrica Passo a Passo (Padrão Symbolab)</h3>
+          
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 1: Espaço de Estados do Produto Cartesiano</span>
+              </div>
+              <div class="step-content">
+                <p>Estados Q = \{q_{par,par}, q_{par,impar}, q_{impar,par}, q_{impar,impar}\} correspondentes às paridades.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 2: Função de Transição de Estados delta</span>
+              </div>
+              <div class="step-content">
+                <p>Transições com '0' alternam a paridade de zeros; transições com '1' alternam a paridade de uns.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 3: Estado Inicial e Conjunto de Aceitação</span>
+              </div>
+              <div class="step-content">
+                <p>q_0 = q_{par,par}; \quad F = \{q_{par,impar}\}.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 4: Aplicação da Minimização de Hopcroft</span>
+              </div>
+              <div class="step-content">
+                <p>Separação inicial em blocos F e Q \setminus F. Nenhum par de estados é indistinguível.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 5: Conclusão Estrutural</span>
+              </div>
+              <div class="step-content">
+                <p>O AFD obtido já é canonicamente mínimo com exatamente 4 estados e zero redundância.</p>
+              </div>
+            </div>
+        </div>
+
+        <div class="plot-box">
+          <div class="box-header">
+            <span>📊 GRÁFICO COMPUTACIONAL &amp; VISUALIZAÇÃO DE RESULTADOS</span>
+            <span class="plot-tag">Matplotlib • Alta Resolução</span>
+          </div>
+          <div class="plot-img-container">
+            <img src="03_Provas_Avaliativas_Checkpoints/Checkpoint_2_cp2/grafico_resolucao.png" alt="Gráfico Autômatos Finitos Determinísticos (AFD) e Minimização de Hopcroft" loading="lazy" />
+          </div>
+        </div>
+      </section>
+      <section id="cp3" class="cp-section">
+        <div class="section-badge">CHECKPOINT 03 • 4ECS 2025</div>
+        <h2 class="section-title">Expressões Regulares e o Lema do Bombeamento para Linguagens Regulares</h2>
+        
+        <div class="problem-box">
+          <div class="box-header">
+            <span>📋 ENUNCIADO ORIGINAL DA AVALIAÇÃO</span>
+            <button class="copy-btn" onclick="copyText('prob-cp3')">Copiar Enunciado</button>
+          </div>
+          <div id="prob-cp3" class="box-content">
+            <p>Utilizar o Lema do Bombeamento (Pumping Lemma) para provar por contradição que a linguagem L = {a^n b^n | n >= 0} não é regular e não pode ser reconhecida por nenhum AFD.</p>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-title">📐 MODELAGEM MATEMÁTICA &amp; FORMULAÇÃO FORMAL</div>
+          <div class="formula-latex">$$\forall w \in L, |w| \ge p \implies w = xyz, \quad |xy| \le p, \quad |y| \ge 1, \quad \forall i \ge 0: x y^i z \in L$$</div>
+        </div>
+
+        <div class="symbolab-container">
+          <h3 class="symbolab-title">💎 Resolução Algébrica Passo a Passo (Padrão Symbolab)</h3>
+          
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 1: Hipótese por Contradição</span>
+              </div>
+              <div class="step-content">
+                <p>Supor que L = \{a^n b^n \mid n \ge 0\} é uma linguagem regular com comprimento de bombeamento p.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 2: Escolha da Cadeia Crítica</span>
+              </div>
+              <div class="step-content">
+                <p>Selecionar a cadeia w = a^p b^p \in L com comprimento |w| = 2p \ge p.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 3: Decomposição Obrigatória w = xyz</span>
+              </div>
+              <div class="step-content">
+                <p>Como |xy| \le p, a subcadeia y consiste exclusivamente de símbolos 'a' (isto é, y = a^k, onde 1 \le k \le p).</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 4: Bombeamento com i = 2</span>
+              </div>
+              <div class="step-content">
+                <p>A cadeia bombeada x y^2 z possui p + k símbolos 'a' e apenas p símbolos 'b'.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 5: Contradição e Conclusão</span>
+              </div>
+              <div class="step-content">
+                <p>Como p + k \ne p, x y^2 z \notin L, refutando a hipótese. Logo, L não é regular e exige autômato com pilha.</p>
+              </div>
+            </div>
+        </div>
+
+        <div class="plot-box">
+          <div class="box-header">
+            <span>📊 GRÁFICO COMPUTACIONAL &amp; VISUALIZAÇÃO DE RESULTADOS</span>
+            <span class="plot-tag">Matplotlib • Alta Resolução</span>
+          </div>
+          <div class="plot-img-container">
+            <img src="03_Provas_Avaliativas_Checkpoints/Checkpoint_3_cp3/grafico_resolucao.png" alt="Gráfico Expressões Regulares e o Lema do Bombeamento para Linguagens Regulares" loading="lazy" />
+          </div>
+        </div>
+      </section>
+      <section id="cp4" class="cp-section">
+        <div class="section-badge">CHECKPOINT 04 • 4ECS 2025</div>
+        <h2 class="section-title">Gramáticas Livres de Contexto (GLC) e Autômatos com Pilha (AP)</h2>
+        
+        <div class="problem-box">
+          <div class="box-header">
+            <span>📋 ENUNCIADO ORIGINAL DA AVALIAÇÃO</span>
+            <button class="copy-btn" onclick="copyText('prob-cp4')">Copiar Enunciado</button>
+          </div>
+          <div id="prob-cp4" class="box-content">
+            <p>Projetar a Gramática Livre de Contexto em Forma Normal de Chomsky (FNC) e o Autômato com Pilha determinístico para reconhecer expressões aritméticas balanceadas com parênteses.</p>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-title">📐 MODELAGEM MATEMÁTICA &amp; FORMULAÇÃO FORMAL</div>
+          <div class="formula-latex">$$A \to BC \lor A \to a \quad (\text{Forma Normal de Chomsky}), \quad \delta: Q \times (\Sigma \cup \{\epsilon\}) \times \Gamma \to \mathcal{P}(Q \times \Gamma^*)$$</div>
+        </div>
+
+        <div class="symbolab-container">
+          <h3 class="symbolab-title">💎 Resolução Algébrica Passo a Passo (Padrão Symbolab)</h3>
+          
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 1: Regras de Produção da GLC</span>
+              </div>
+              <div class="step-content">
+                <p>S \to S + S \mid S * S \mid (S) \mid a.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 2: Eliminação de Ambiguidade</span>
+              </div>
+              <div class="step-content">
+                <p>Separação em níveis de precedência: E (Expressão/Soma), T (Termo/Multiplicação), F (Fator/Parênteses).</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 3: Conversão para Forma Normal de Chomsky</span>
+              </div>
+              <div class="step-content">
+                <p>Eliminação de produções-\epsilon, produções unitárias e substituição por produções estritamente binárias.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 4: Operação da Pilha do Autômato</span>
+              </div>
+              <div class="step-content">
+                <p>Empilhamento de '(' ao encontrar abre-parênteses e desempilhamento correspondente em fecha-parênteses ')'.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 5: Conclusão de Reconhecimento</span>
+              </div>
+              <div class="step-content">
+                <p>Aceitação por pilha vazia e estado final garantindo parsing sintático de compiladores em O(N^3).</p>
+              </div>
+            </div>
+        </div>
+
+        <div class="plot-box">
+          <div class="box-header">
+            <span>📊 GRÁFICO COMPUTACIONAL &amp; VISUALIZAÇÃO DE RESULTADOS</span>
+            <span class="plot-tag">Matplotlib • Alta Resolução</span>
+          </div>
+          <div class="plot-img-container">
+            <img src="03_Provas_Avaliativas_Checkpoints/Checkpoint_4_cp4/grafico_resolucao.png" alt="Gráfico Gramáticas Livres de Contexto (GLC) e Autômatos com Pilha (AP)" loading="lazy" />
+          </div>
+        </div>
+      </section>
+      <section id="cp5" class="cp-section">
+        <div class="section-badge">CHECKPOINT 05 • 4ECS 2025</div>
+        <h2 class="section-title">Máquinas de Turing, Tese de Church-Turing e Linguagens Recursivas</h2>
+        
+        <div class="problem-box">
+          <div class="box-header">
+            <span>📋 ENUNCIADO ORIGINAL DA AVALIAÇÃO</span>
+            <button class="copy-btn" onclick="copyText('prob-cp5')">Copiar Enunciado</button>
+          </div>
+          <div id="prob-cp5" class="box-content">
+            <p>Construir a função de transição de uma Máquina de Turing padrão de fita infinita para reconhecer a linguagem de cópia L = {w#w | w in {0,1}*} e formalizar a Tese de Church-Turing.</p>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-title">📐 MODELAGEM MATEMÁTICA &amp; FORMULAÇÃO FORMAL</div>
+          <div class="formula-latex">$$M = (Q, \Sigma, \Gamma, \delta, q_0, B, F), \quad \delta(q, X) = (p, Y, D), \quad D \in \{L, R\}$$</div>
+        </div>
+
+        <div class="symbolab-container">
+          <h3 class="symbolab-title">💎 Resolução Algébrica Passo a Passo (Padrão Symbolab)</h3>
+          
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 1: Estrutura da Fita e Cabeçote de Leitura/Gravação</span>
+              </div>
+              <div class="step-content">
+                <p>Alfabeto de fita \Gamma = \{0, 1, X, Y, \#, B\} com símbolo em branco B.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 2: Algoritmo de Casamento de Símbolos</span>
+              </div>
+              <div class="step-content">
+                <p>O cabeçote lê o primeiro símbolo antes de '#', substitui por X, move à direita até a posição correspondente após '#' e valida.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 3: Retorno do Cabeçote à Esquerda</span>
+              </div>
+              <div class="step-content">
+                <p>Retorno à esquerda até o próximo símbolo não marcado.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 4: Verificação de Término</span>
+              </div>
+              <div class="step-content">
+                <p>Quando todos os símbolos à esquerda de '#' forem consumidos, verifica se não restam símbolos residuais à direita.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 5: Conclusão de Computabilidade</span>
+              </div>
+              <div class="step-content">
+                <p>A máquina atinge o estado de aceitação q_{accept} em O(N^2) passos, confirmando que L é uma linguagem recursiva (decidível).</p>
+              </div>
+            </div>
+        </div>
+
+        <div class="plot-box">
+          <div class="box-header">
+            <span>📊 GRÁFICO COMPUTACIONAL &amp; VISUALIZAÇÃO DE RESULTADOS</span>
+            <span class="plot-tag">Matplotlib • Alta Resolução</span>
+          </div>
+          <div class="plot-img-container">
+            <img src="03_Provas_Avaliativas_Checkpoints/Checkpoint_5_cp5/grafico_resolucao.png" alt="Gráfico Máquinas de Turing, Tese de Church-Turing e Linguagens Recursivas" loading="lazy" />
+          </div>
+        </div>
+      </section>
+      <section id="cp6" class="cp-section">
+        <div class="section-badge">CHECKPOINT 06 • 4ECS 2025</div>
+        <h2 class="section-title">Decidibilidade, o Problema da Parada de Turing e Classes de Complexidade P vs NP</h2>
+        
+        <div class="problem-box">
+          <div class="box-header">
+            <span>📋 ENUNCIADO ORIGINAL DA AVALIAÇÃO</span>
+            <button class="copy-btn" onclick="copyText('prob-cp6')">Copiar Enunciado</button>
+          </div>
+          <div id="prob-cp6" class="box-content">
+            <p>Demonstrar formalmente por redução e diagonalização de Cantor a indecidibilidade do Problema da Parada (Halting Problem) e situar as classes P, NP, NP-Completo e NP-Difícil.</p>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-title">📐 MODELAGEM MATEMÁTICA &amp; FORMULAÇÃO FORMAL</div>
+          <div class="formula-latex">$$H(\langle M, w \rangle) = \begin{cases} \text{Sim}, & \text{se } M(w) \text{ para} \\ \text{Não}, & \text{se } M(w) \text{ entra em loop} \end{cases} \implies \text{Paradoxo Lógico}$$</div>
+        </div>
+
+        <div class="symbolab-container">
+          <h3 class="symbolab-title">💎 Resolução Algébrica Passo a Passo (Padrão Symbolab)</h3>
+          
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 1: Suposição da Existência do Decisor Universal H</span>
+              </div>
+              <div class="step-content">
+                <p>Supor que existe máquina de Turing H capaz de decidir se qualquer M para com entrada w.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 2: Construção da Máquina Paradoxal D</span>
+              </div>
+              <div class="step-content">
+                <p>Construir D que toma a descrição \langle M \rangle como entrada: chama H(\langle M, \langle M \rangle \rangle) e inverte o resultado (entra em loop se H responder Sim; para se H responder Não).</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 3: Execução de D com sua Própria Descrição</span>
+              </div>
+              <div class="step-content">
+                <p>O que acontece com D(\langle D \rangle)? Se D para, H diz que para, logo D entra em loop (Contradição!). Se D entra em loop, H diz que não para, logo D para (Contradição!).</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 4: Conclusão da Indecidibilidade</span>
+              </div>
+              <div class="step-content">
+                <p>Nenhuma máquina H pode existir. O Problema da Parada é categoricamente indecidível.</p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-tag">Passo 5: Relação com Classes P e NP</span>
+              </div>
+              <div class="step-content">
+                <p>Problemas verificáveis em tempo polinomial (NP) vs decidíveis em tempo polinomial (P) com problemas NP-Completos sendo os mais difíceis de NP.</p>
+              </div>
+            </div>
+        </div>
+
+        <div class="plot-box">
+          <div class="box-header">
+            <span>📊 GRÁFICO COMPUTACIONAL &amp; VISUALIZAÇÃO DE RESULTADOS</span>
+            <span class="plot-tag">Matplotlib • Alta Resolução</span>
+          </div>
+          <div class="plot-img-container">
+            <img src="03_Provas_Avaliativas_Checkpoints/Checkpoint_6_cp6/grafico_resolucao.png" alt="Gráfico Decidibilidade, o Problema da Parada de Turing e Classes de Complexidade P vs NP" loading="lazy" />
+          </div>
+        </div>
+      </section>
+  </main>
+
+  <footer>
+    <p><strong>FIAP • Faculdade de Informática e Administração Paulista</strong></p>
+    <p>Bacharelado em Engenharia da Computação • Turma 4ECS (2025) • Desafio: SPI / Metaindústria (Gêmeo Digital & Células Robóticas)</p>
+    <p>Acervo mantido por <a href="https://github.com/Guimemee" target="_blank" rel="noopener">Guilherme Macário da Silva (@Guimemee)</a></p>
+  </footer>
+
+  <script>
+    function copyText(elementId) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.innerText || el.textContent;
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert('Enunciado copiado com sucesso para a área de transferência!');
+        }).catch(err => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+
+      function fallbackCopy(val) {
+        const ta = document.createElement('textarea');
+        ta.value = val;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        alert('Enunciado copiado!');
+      }
+    }
+  </script>
+</body>
+</html>

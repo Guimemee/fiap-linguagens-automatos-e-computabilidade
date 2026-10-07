@@ -1,0 +1,7 @@
+FIAP • Engenharia da Computação
+Disciplina: Linguagens, Autômatos e Computabilidade
+Turma 4ECS • Ano 2025
+Checkpoint 06: Decidibilidade, o Problema da Parada de Turing e Classes de Complexidade P vs NP
+
+ENUNCIADO ORIGINAL:
+Demonstrar formalmente por redução e diagonalização de Cantor a indecidibilidade do Problema da Parada (Halting Problem) e situar as classes P, NP, NP-Completo e NP-Difícil.

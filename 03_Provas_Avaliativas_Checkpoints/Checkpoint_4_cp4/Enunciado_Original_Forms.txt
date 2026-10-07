@@ -1,0 +1,7 @@
+FIAP • Engenharia da Computação
+Disciplina: Linguagens, Autômatos e Computabilidade
+Turma 4ECS • Ano 2025
+Checkpoint 04: Gramáticas Livres de Contexto (GLC) e Autômatos com Pilha (AP)
+
+ENUNCIADO ORIGINAL:
+Projetar a Gramática Livre de Contexto em Forma Normal de Chomsky (FNC) e o Autômato com Pilha determinístico para reconhecer expressões aritméticas balanceadas com parênteses.
